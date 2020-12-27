@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, flash, redirect
 app = Flask(__name__)
 from forms import RegistrationForm, LoginForm
 
+
 app.config["SECRET_KEY"] = "606f36256c1e65ac6075db285c0b4958"
 
 posts = [
@@ -37,10 +38,17 @@ def register():
 
     return render_template('register.html', title="Register", form=form)
     
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    if form.email.data == 'test@example.com' and form.password == 'test':
+        flash("You have been logged in!", 'success')
+        return redirect(url_for('home'))
+    else:
+        flash("Unsuccessful Login.", "danger")
     return render_template('login.html', title="Login", form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# run pip install flask-sqlalchemy
